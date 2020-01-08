@@ -20,11 +20,11 @@ private slots:
 
     void on_url_edit_returnPressed();
 
-    void on_webView_loadProgress(int progress);
+    void on_webEngineView_loadProgress(int progress);
 
-    void on_webView_loadFinished(bool arg1);
+    void on_webEngineView_loadStarted();
 
-    void on_webView_loadStarted();
+    void on_webEngineView_loadFinished(bool arg1);
 
 private:
     Ui::MainWindow *ui;

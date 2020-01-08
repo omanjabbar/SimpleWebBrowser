@@ -10,7 +10,7 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
-#include <QtWebKitWidgets/QWebView>
+#include <QtWebEngineWidgets/QWebEngineView>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
@@ -34,13 +34,13 @@ public:
     QGridLayout *gridLayout;
     QGroupBox *groupBox;
     QGridLayout *gridLayout_2;
-    QLineEdit *url_edit;
-    QPushButton *reload_button;
-    QWebView *webView;
-    QPushButton *back_button;
+    QWebEngineView *webEngineView;
     QProgressBar *progressBar;
+    QPushButton *reload_button;
+    QLineEdit *url_edit;
     QPushButton *return_button;
     QPushButton *forward_button;
+    QPushButton *back_button;
     QMenuBar *menuBar;
     QStatusBar *statusBar;
 
@@ -63,12 +63,19 @@ public:
         gridLayout_2->setSpacing(6);
         gridLayout_2->setContentsMargins(11, 11, 11, 11);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
-        url_edit = new QLineEdit(groupBox);
-        url_edit->setObjectName(QStringLiteral("url_edit"));
-        url_edit->setMinimumSize(QSize(0, 30));
-        url_edit->setMaximumSize(QSize(16777215, 30));
+        webEngineView = new QWebEngineView(groupBox);
+        webEngineView->setObjectName(QStringLiteral("webEngineView"));
+        webEngineView->setUrl(QUrl(QStringLiteral("about:blank")));
 
-        gridLayout_2->addWidget(url_edit, 0, 3, 1, 1);
+        gridLayout_2->addWidget(webEngineView, 1, 0, 1, 5);
+
+        progressBar = new QProgressBar(groupBox);
+        progressBar->setObjectName(QStringLiteral("progressBar"));
+        progressBar->setMinimumSize(QSize(250, 0));
+        progressBar->setMaximumSize(QSize(250, 16777215));
+        progressBar->setValue(24);
+
+        gridLayout_2->addWidget(progressBar, 2, 0, 1, 1);
 
         reload_button = new QPushButton(groupBox);
         reload_button->setObjectName(QStringLiteral("reload_button"));
@@ -80,27 +87,12 @@ public:
 
         gridLayout_2->addWidget(reload_button, 0, 2, 1, 1);
 
-        webView = new QWebView(groupBox);
-        webView->setObjectName(QStringLiteral("webView"));
-        webView->setUrl(QUrl(QStringLiteral("about:blank")));
+        url_edit = new QLineEdit(groupBox);
+        url_edit->setObjectName(QStringLiteral("url_edit"));
+        url_edit->setMinimumSize(QSize(0, 30));
+        url_edit->setMaximumSize(QSize(16777215, 30));
 
-        gridLayout_2->addWidget(webView, 1, 0, 1, 5);
-
-        back_button = new QPushButton(groupBox);
-        back_button->setObjectName(QStringLiteral("back_button"));
-        back_button->setMinimumSize(QSize(0, 30));
-        back_button->setMaximumSize(QSize(16777215, 30));
-        back_button->setFont(font);
-
-        gridLayout_2->addWidget(back_button, 0, 0, 1, 1);
-
-        progressBar = new QProgressBar(groupBox);
-        progressBar->setObjectName(QStringLiteral("progressBar"));
-        progressBar->setMinimumSize(QSize(250, 0));
-        progressBar->setMaximumSize(QSize(250, 16777215));
-        progressBar->setValue(24);
-
-        gridLayout_2->addWidget(progressBar, 2, 0, 1, 1);
+        gridLayout_2->addWidget(url_edit, 0, 3, 1, 1);
 
         return_button = new QPushButton(groupBox);
         return_button->setObjectName(QStringLiteral("return_button"));
@@ -118,6 +110,14 @@ public:
 
         gridLayout_2->addWidget(forward_button, 0, 1, 1, 1);
 
+        back_button = new QPushButton(groupBox);
+        back_button->setObjectName(QStringLiteral("back_button"));
+        back_button->setMinimumSize(QSize(0, 30));
+        back_button->setMaximumSize(QSize(16777215, 30));
+        back_button->setFont(font);
+
+        gridLayout_2->addWidget(back_button, 0, 0, 1, 1);
+
 
         gridLayout->addWidget(groupBox, 0, 0, 1, 1);
 
@@ -131,9 +131,9 @@ public:
         MainWindow->setStatusBar(statusBar);
 
         retranslateUi(MainWindow);
-        QObject::connect(back_button, SIGNAL(clicked()), webView, SLOT(back()));
-        QObject::connect(forward_button, SIGNAL(clicked()), webView, SLOT(forward()));
-        QObject::connect(reload_button, SIGNAL(clicked()), webView, SLOT(reload()));
+        QObject::connect(back_button, SIGNAL(clicked()), webEngineView, SLOT(back()));
+        QObject::connect(forward_button, SIGNAL(clicked()), webEngineView, SLOT(forward()));
+        QObject::connect(reload_button, SIGNAL(clicked()), webEngineView, SLOT(reload()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -143,9 +143,9 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Web Browser", Q_NULLPTR));
         groupBox->setTitle(QApplication::translate("MainWindow", "Navigation", Q_NULLPTR));
         reload_button->setText(QApplication::translate("MainWindow", "\342\237\263", Q_NULLPTR));
-        back_button->setText(QApplication::translate("MainWindow", "\342\206\220", Q_NULLPTR));
         return_button->setText(QApplication::translate("MainWindow", " \342\206\265", Q_NULLPTR));
         forward_button->setText(QApplication::translate("MainWindow", "\342\206\222", Q_NULLPTR));
+        back_button->setText(QApplication::translate("MainWindow", "\342\206\220", Q_NULLPTR));
     } // retranslateUi
 
 };

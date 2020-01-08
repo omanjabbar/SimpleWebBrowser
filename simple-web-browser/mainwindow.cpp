@@ -15,7 +15,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-// handling return button press
+// handling return button clicked
 void MainWindow::on_return_button_clicked()
 {
     // reading url
@@ -24,7 +24,7 @@ void MainWindow::on_return_button_clicked()
     if (!(url.contains("https//www.") || url.contains("http//www."))) {
         url = "https://" + url;
     }
-    ui->webView->load(url);
+    ui->webEngineView->load(url);
 }
 
 // when return key is pressed
@@ -33,8 +33,8 @@ void MainWindow::on_url_edit_returnPressed()
     on_return_button_clicked();
 }
 
-// handling the progress bar above status bar
-void MainWindow::on_webView_loadProgress(int progress)
+// handling progress bar for webEngineView
+void MainWindow::on_webEngineView_loadProgress(int progress)
 {
     ui->progressBar->show();
     ui->progressBar->setValue(progress);
@@ -44,10 +44,17 @@ void MainWindow::on_webView_loadProgress(int progress)
     }
 }
 
-// checking if the page was loaded successfully
-void MainWindow::on_webView_loadFinished(bool arg1)
+// handling starting of loading
+void MainWindow::on_webEngineView_loadStarted()
 {
-    QString url = ui->webView->url().toString();
+    QString url = ui->url_edit->text();
+    ui->statusBar->showMessage("Loading URL: " + url);
+}
+
+// handling when the laoding is finished
+void MainWindow::on_webEngineView_loadFinished(bool arg1)
+{
+    QString url = ui->webEngineView->url().toString();
     if (arg1) {
         ui->statusBar->showMessage("Successfully loaded URL:  " + url);
 
@@ -58,11 +65,4 @@ void MainWindow::on_webView_loadFinished(bool arg1)
     else {
         ui->statusBar->showMessage("Failed loading URL:  Invalid URL");
     }
-}
-
-// when loading started
-void MainWindow::on_webView_loadStarted()
-{
-    QString url = ui->url_edit->text();
-    ui->statusBar->showMessage("Loading URL: " + url);
 }
